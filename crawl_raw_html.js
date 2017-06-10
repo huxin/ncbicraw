@@ -72,7 +72,7 @@ for (var i=0; i < links.length; i ++) {
 }
 
 casper.run(function() {
-  emailf.close()
+  rawf.close()
   timeoutf.close()
   this.exit()
 })
