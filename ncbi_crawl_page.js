@@ -36,11 +36,26 @@ var getAuthorInfo = function() {
   return author_lines
 }
 
+var getFullTextLink = function() {
+  var portlets = document.querySelectorAll('.icons.portlet')
+  var fulltextlinks = []
+  for (var i = 0; i < portlets.length; i ++) {
+    var p = portlets[i]
+    var as = p.querySelectorAll('a')
+    for (var j = 0; j < as.length; j ++) {
+      fulltextlinks.push(as[j].href)
+    }
+  }
+  return fulltextlinks
+}
+
 var author_info_file = linkfile + ".authors.txt"
+var fulltext_link_file = linkfile + '.fulltext.link.txt'
 var linkIndx = 1
 
 var authorf = fs.open(author_info_file, 'a')
-var rawhtmlf = fs.open("rawhtml.txt", 'a')
+
+var ftlf = fs.open(fulltext_link_file, 'a')
 
 casper.start()
 
@@ -67,13 +82,15 @@ for (var i=0; i < links.length; i ++) {
       var author_lines = this.evaluate(getAuthorInfo)
       var output = "url: " + realURL + "\n" + author_lines.join('\n') + "\n"
       authorf.write(output)
-      rawhtmlf.write(this.getHTML() + '\nXXXX-------------MMMM\n')
+
+      var fulltextlinks = this.evaluate(getFullTextLink)
+      ftlf.write(fulltextlinks.join("\n")+"\n")
     })
   })
 }
 
 casper.run(function() {
   authorf.close()
-  rawhtmlf.close()
+  ftlf.close()
   this.exit()
 })
