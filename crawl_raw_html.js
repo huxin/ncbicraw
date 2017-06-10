@@ -37,7 +37,7 @@ console.log("reading links from: " + linkfile)
 var content = fs.read(linkfile)
 var links = content.split('\n')
 
-var rawhtml_file = linkfile + ".email.txt"
+var rawhtml_file = linkfile + ".raw.txt"
 var linkIndx = 1
 
 var rawf = fs.open(rawhtml_file, 'a')
