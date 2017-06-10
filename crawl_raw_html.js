@@ -36,27 +36,11 @@ if (args.length > 1) {
 console.log("reading links from: " + linkfile)
 var content = fs.read(linkfile)
 var links = content.split('\n')
-var emailPatt = /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/g
 
-var searchEmail = function(s) {
-  var o = {}
-
-  match = emailPatt.exec(s)
-
-  while (match != null) {
-    email = match[0]
-    match = emailPatt.exec(s)
-    o[email] = 1
-  }
-
-  return Object.keys(o)
-}
-
-
-var email_file = linkfile + ".email.txt"
+var rawhtml_file = linkfile + ".email.txt"
 var linkIndx = 1
 
-var emailf = fs.open(email_file, 'a')
+var rawf = fs.open(rawhtml_file, 'a')
 
 casper.start()
 
@@ -81,20 +65,9 @@ for (var i=0; i < links.length; i ++) {
     linkIndx ++
 
     html_text = this.getHTML()
-    emails = searchEmail(html_text)
-
-    if (emails.length == 0) {
-      // if didn't find email, let's wait for a few seconds and try again
-      emails.push("NONE")
-    }
-
-    for (var i = 0; i < emails.length; i ++) {
-      output = emails[i] + " " + realURL + "\n"
-      emailf.write(output)
-    }
-    console.log("\tfound " + emails.length + " emails")
-
-
+    output = "XXXXX-START-MMMMM-" + realURL + "\n" + html_text + "\n" + "\n"
+    rawf.write(output)
+    rawf.flush()
     })
 }
 
