@@ -22,14 +22,21 @@ var casper = require('casper').create({
 
 var args = casper.cli['args']
 var linkfile = 'ahmu_ncbi.links.txt.fulltext.link.txt'
+
 var start = 1
 
 if (args.length > 0) {
   linkfile = args[0]
 }
 
+var progress_file = linkfile + '.progress'
+
 if (args.length > 1) {
   start = parseInt(args[1])
+} else {
+  // read progress file and parseInt
+  var content = fs.read(progress_file)
+  start = parseInt(content)
 }
 
 
@@ -68,6 +75,7 @@ for (var i=0; i < links.length; i ++) {
     output = "XXXXX-START-MMMMM-" + realURL + "\n" + html_text + "\n" + "\n"
     rawf.write(output)
     rawf.flush()
+    fs.write(progress_file, linkIndx-1)
     })
 }
 
