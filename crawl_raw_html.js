@@ -35,8 +35,10 @@ if (args.length > 1) {
   start = parseInt(args[1])
 } else {
   // read progress file and parseInt
-  var content = fs.read(progress_file)
-  start = parseInt(content)
+  if (fs.exists(progress_file)) {
+    var content = fs.read(progress_file)
+    start = parseInt(content)
+  }
 }
 
 
