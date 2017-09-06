@@ -1,6 +1,6 @@
 var links = []
 var fs = require("fs")
-var path = 'ahmu_ncbi.links.txt'
+var path = 'ahui_ncbi.links.txt'
 
 
 var casper = require('casper').create({
@@ -8,7 +8,8 @@ var casper = require('casper').create({
        userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
    }
 })
-var url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term=Anhui+Medical+University'
+// var url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term=Anhui+Medical+University'
+var url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term=anhui'
 var currentPage = 1
 var links = []
 

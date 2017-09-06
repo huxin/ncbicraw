@@ -21,16 +21,24 @@ var casper = require('casper').create({
 })
 
 var args = casper.cli['args']
-var linkfile = 'ahmu_ncbi.links.txt.fulltext.link.txt'
+var linkfile = 'anhui.links.txt.fulltext.link.txt'
 var start = 1
 
 if (args.length > 0) {
   linkfile = args[0]
 }
 
+var progress_file = linkfile + '.progress'
+
 if (args.length > 1) {
   start = parseInt(args[1])
+} else {
+  if (fs.exists(progress_file)) {
+    var content = fs.read(progress_file)
+    start = parseInt(content)
+  }
 }
+
 
 
 console.log("reading links from: " + linkfile)
@@ -93,8 +101,7 @@ for (var i=0; i < links.length; i ++) {
       emailf.write(output)
     }
     console.log("\tfound " + emails.length + " emails")
-
-
+    fs.write(progress_file, linkIndx-1)
     })
 }
 
