@@ -1,6 +1,7 @@
 var links = []
 var fs = require("fs")
-var path = 'ahui_ncbi.links.txt'
+var searchTerm = 'hefei'
+var path = searchTerm + '_ncbi.links.txt'
 
 
 var casper = require('casper').create({
@@ -9,7 +10,8 @@ var casper = require('casper').create({
    }
 })
 // var url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term=Anhui+Medical+University'
-var url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term=anhui'
+// var url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term=anhui'
+var url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term=' + searchTerm
 var currentPage = 1
 var links = []
 
@@ -46,7 +48,7 @@ var processPage = function() {
   console.log("Scraping page: " + currentPage + " got: " + page_links.length + " links, total: ", links.length)
 
    // try to scrape 5 pages for now
-   if (currentPage > 37 || !this.exists('.rprt .title a') || !this.exists('.active.page_link.next')) {
+   if (!this.exists('.rprt .title a') || !this.exists('.active.page_link.next')) {
      return terminate.call(casper)
    }
 
