@@ -11,6 +11,7 @@ var casper = require('casper').create({
 var args = casper.cli['args']
 var linkfile = 'ahmu_ncbi.links.txt'
 var start = 1
+var progress_file = linkfile + '.progress'
 
 if (args.length > 0) {
   linkfile = args[0]
@@ -18,6 +19,12 @@ if (args.length > 0) {
 
 if (args.length > 1) {
   start = parseInt(args[1])
+} else {
+  // read progress file and parseInt
+  if (fs.exists(progress_file)) {
+    var content = fs.read(progress_file)
+    start = parseInt(content)
+  }
 }
 
 
@@ -48,6 +55,7 @@ var getFullTextLink = function() {
   }
   return fulltextlinks
 }
+
 
 var author_info_file = linkfile + ".authors.txt"
 var fulltext_link_file = linkfile + '.fulltext.link.txt'
@@ -85,6 +93,8 @@ for (var i=0; i < links.length; i ++) {
 
       var fulltextlinks = this.evaluate(getFullTextLink)
       ftlf.write(fulltextlinks.join("\n")+"\n")
+      ftlf.flush()
+      fs.write(progress_file, linkIndx-1)
     })
   })
 }
