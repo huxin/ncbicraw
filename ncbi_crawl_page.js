@@ -67,9 +67,10 @@ var authorf = fs.open(author_info_file, 'a')
 var ftlf = fs.open(fulltext_link_file, 'a')
 
 casper.start()
-
+console.log("Start is " + start)
 for (var i=start; i < links.length; i ++) {
   if (links[i].length == 0) {
+    console.log("link " + i + " length is 0: " + links[i] + "skip")
     fs.write(progress_file, i)
     continue
   }
