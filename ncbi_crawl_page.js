@@ -11,11 +11,13 @@ var casper = require('casper').create({
 var args = casper.cli['args']
 var linkfile = 'ahmu_ncbi.links.txt'
 var start = 1
-var progress_file = linkfile + '.progress'
+
 
 if (args.length > 0) {
   linkfile = args[0]
 }
+
+var progress_file = linkfile + '.progress'
 
 if (args.length > 1) {
   start = parseInt(args[1])
@@ -95,6 +97,7 @@ for (var i=0; i < links.length; i ++) {
       ftlf.write(fulltextlinks.join("\n")+"\n")
       ftlf.flush()
       fs.write(progress_file, linkIndx-1)
+      fs.flush()
     })
   })
 }
