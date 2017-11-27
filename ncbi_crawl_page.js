@@ -10,7 +10,7 @@ var casper = require('casper').create({
 
 var args = casper.cli['args']
 var linkfile = 'ahmu_ncbi.links.txt'
-var start = 1
+var start = 0
 
 
 if (args.length > 0) {
@@ -61,7 +61,6 @@ var getFullTextLink = function() {
 
 var author_info_file = linkfile + ".authors.txt"
 var fulltext_link_file = linkfile + '.fulltext.link.txt'
-var linkIndx = 1
 
 var authorf = fs.open(author_info_file, 'a')
 
@@ -69,13 +68,9 @@ var ftlf = fs.open(fulltext_link_file, 'a')
 
 casper.start()
 
-for (var i=0; i < links.length; i ++) {
+for (var i=start; i < links.length; i ++) {
   if (links[i].length == 0) {
-    continue
-  }
-
-  if (linkIndx < start) {
-    linkIndx ++
+    fs.write(progress_file, i)
     continue
   }
 
@@ -86,8 +81,7 @@ for (var i=0; i < links.length; i ++) {
     var realURL = this.evaluate(function(){
       return document.URL
     })
-    console.log("Crawling " + linkIndx + " link: " + realURL)
-    linkIndx ++
+    console.log("Crawling " + i + " link: " + realURL)
     this.waitForSelector('.ui-ncbi-toggler-slave.ui-ncbitoggler.ui-ncbitoggler-slave', function(){
       var author_lines = this.evaluate(getAuthorInfo)
       var output = "url: " + realURL + "\n" + author_lines.join('\n') + "\n"
@@ -96,7 +90,7 @@ for (var i=0; i < links.length; i ++) {
       var fulltextlinks = this.evaluate(getFullTextLink)
       ftlf.write(fulltextlinks.join("\n")+"\n")
       ftlf.flush()
-      fs.write(progress_file, linkIndx-1)
+      fs.write(progress_file, i)
       fs.flush()
     })
   })
